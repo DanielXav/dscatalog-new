@@ -45,9 +45,25 @@ public class CategoryService {
         return new CategoryDTO(category);
     }*/
 
+    @Transactional
     public RCategoryDTO findById(Long id) {
         Optional<Category> obj = repository.findById(id);
 
         return RCategoryDTO.fromCategory(obj.orElseThrow(() -> new EntityNotFoundException("Entity not found")));
+    }
+
+    /*@Transactional
+    public CategoryDTO insert(CategoryDTO categoryDTO) {
+        Category category = new Category();
+        category.setName(categoryDTO.getName());
+        category = repository.save(category);
+        return new CategoryDTO(category);
+    }*/
+
+    public RCategoryDTO insert(RCategoryDTO dto) {
+        Category category = new Category();
+        category.setName(dto.name());
+        category = repository.save(category);
+        return RCategoryDTO.fromCategory(category);
     }
 }
