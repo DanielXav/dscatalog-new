@@ -4,6 +4,7 @@ import com.danielxavier.dsnewcatalog.dto.CategoryDTO;
 import com.danielxavier.dsnewcatalog.entities.Category;
 import com.danielxavier.dsnewcatalog.records.RCategoryDTO;
 import com.danielxavier.dsnewcatalog.repositories.CategoryRepository;
+import com.danielxavier.dsnewcatalog.services.exceptions.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,7 @@ public class CategoryService {
 
     public RCategoryDTO findById(Long id) {
         Optional<Category> obj = repository.findById(id);
-        return RCategoryDTO.fromCategory(obj.get());
+
+        return RCategoryDTO.fromCategory(obj.orElseThrow(() -> new EntityNotFoundException("Entity not found")));
     }
 }
