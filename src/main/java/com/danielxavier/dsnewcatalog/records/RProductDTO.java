@@ -6,7 +6,7 @@ import com.danielxavier.dsnewcatalog.entities.Product;
 import java.time.Instant;
 import java.util.List;
 
-public record RProductDTO(Long id, String name, String description, Double price, String imgUrl, Instant Date, List<RCategoryDTO> categories) {
+public record RProductDTO(Long id, String name, String description, Double price, String imgUrl, Instant date, List<RCategoryDTO> categories) {
     public static RProductDTO fromProduct(Product product) {
         return new RProductDTO(
                 product.getId(),
