@@ -5,6 +5,8 @@ import com.danielxavier.dsnewcatalog.entities.Category;
 import com.danielxavier.dsnewcatalog.records.RCategoryDTO;
 import com.danielxavier.dsnewcatalog.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -21,8 +23,8 @@ public class CategoryController {
     private CategoryService service;
 
     @GetMapping
-    public ResponseEntity<List<RCategoryDTO>> findAll() {
-        List<RCategoryDTO> category = service.findAll();;
+    public ResponseEntity<Page<RCategoryDTO>> findAll(Pageable pageable) {
+        Page<RCategoryDTO> category = service.findAll(pageable);;
         return ResponseEntity.ok(category);
     }
 

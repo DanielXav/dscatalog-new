@@ -9,6 +9,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -31,12 +33,10 @@ public class CategoryService {
     }*/
 
     @Transactional
-    public List<RCategoryDTO> findAll() {
-        List<Category> entities = repository.findAll();
+    public Page<RCategoryDTO> findAll(Pageable pageable) {
+        Page<Category> entities = repository.findAll(pageable);
 
-        return entities.stream()
-                .map(RCategoryDTO::fromCategory)
-                .toList();
+        return entities.map(RCategoryDTO::fromCategory);
     }
 
     /*@Transactional
@@ -106,5 +106,4 @@ public class CategoryService {
             throw new DatabaseException("Falha de integridade referencial");
         }
     }
-
 }
