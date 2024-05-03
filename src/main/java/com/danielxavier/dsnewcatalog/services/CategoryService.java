@@ -4,15 +4,14 @@ import com.danielxavier.dsnewcatalog.dto.CategoryDTO;
 import com.danielxavier.dsnewcatalog.entities.Category;
 import com.danielxavier.dsnewcatalog.records.RCategoryDTO;
 import com.danielxavier.dsnewcatalog.repositories.CategoryRepository;
-import com.danielxavier.dsnewcatalog.services.exceptions.EntityNotFoundException;
+import com.danielxavier.dsnewcatalog.services.exceptions.ResouceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CancellationException;
 
 @Service
 public class CategoryService {
@@ -49,7 +48,7 @@ public class CategoryService {
     public RCategoryDTO findById(Long id) {
         Optional<Category> obj = repository.findById(id);
 
-        return RCategoryDTO.fromCategory(obj.orElseThrow(() -> new EntityNotFoundException("Entity not found")));
+        return RCategoryDTO.fromCategory(obj.orElseThrow(() -> new ResouceNotFoundException("Entity not found")));
     }
 
     /*@Transactional
@@ -60,10 +59,24 @@ public class CategoryService {
         return new CategoryDTO(category);
     }*/
 
+    @Transactional
     public RCategoryDTO insert(RCategoryDTO dto) {
         Category category = new Category();
         category.setName(dto.name());
         category = repository.save(category);
         return RCategoryDTO.fromCategory(category);
+    }
+
+    @Transactional
+    public CategoryDTO update(Long id, CategoryDTO categoryDTO) {
+        try {
+            Category category = repository.getReferenceById(id);
+            category.setName(categoryDTO.getName());
+            category = repository.save(category);
+            return new CategoryDTO(category);
+        }
+        catch (EntityNotFoundException e) {
+            throw new ResouceNotFoundException("Id not found " + id);
+        }
     }
 }
