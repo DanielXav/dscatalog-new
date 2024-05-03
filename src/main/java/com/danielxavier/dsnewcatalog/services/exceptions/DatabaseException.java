@@ -1,0 +1,7 @@
+package com.danielxavier.dsnewcatalog.services.exceptions;
+
+public class DatabaseException extends RuntimeException {
+    public DatabaseException(String message){
+        super(message);
+    }
+}
